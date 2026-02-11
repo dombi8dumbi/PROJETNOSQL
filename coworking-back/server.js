@@ -11,7 +11,15 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => res.send('Backend coworking fonctionne !'));
+app.get('/', (req, res) => {
+  res.status(200).json({
+    name: "Coworking API",
+    status: "running",
+    message: "Backend coworking fonctionne",
+    docs: "/api-docs"
+  });
+});
+
 
 // Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI, {
