@@ -1,4 +1,4 @@
-console.log("🔥 ICI C'EST LE BON SERVER.JS =>", __filename);
+console.log(" ICI C'EST LE BON SERVER.JS =>", __filename);
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -17,7 +17,7 @@ app.use(express.json());
 // Swagger (config robuste)
 app.use('/api-docs', swaggerUi.serve);
 app.get('/api-docs', swaggerUi.setup(swaggerSpec));
-console.log("✅ Swagger mounted on /api-docs");
+console.log(" Swagger mounted on /api-docs");
 
 // Route test (pour vérifier que tu touches le bon serveur)
 app.get('/ping', (req, res) => res.send('pong'));
@@ -35,9 +35,9 @@ app.get('/', (req, res) => {
 // Connexion MongoDB (ne bloque pas Swagger si Mongo est KO)
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connecté !'))
-  .catch(err => console.log('❌ Erreur MongoDB :', err.message));
+  .catch(err => console.log(' Erreur MongoDB :', err.message));
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server up and running on port ${PORT}`);
+  console.log(` Server up and running on port ${PORT}`);
 });
