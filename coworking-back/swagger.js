@@ -52,30 +52,6 @@ const options = {
             Mot_de_passe: { type: 'string', example: 'Abcd1234!' },
           },
         },
-
-        Error400: {
-          type: 'object',
-          properties: {
-            message: { type: 'string', example: 'Validation error' },
-            errors: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  field: { type: 'string', example: 'Email_user' },
-                  message: { type: 'string', example: 'Email_user est obligatoire' },
-                },
-              },
-            },
-          },
-        },
-
-        Error401: {
-          type: 'object',
-          properties: {
-            message: { type: 'string', example: 'Unauthorized: token missing or invalid' },
-          },
-        },
       },
     },
 
@@ -112,9 +88,9 @@ const options = {
               description: 'Bad Request (champ obligatoire manquant / invalide)',
               content: { 'application/json': { schema: { $ref: '#/components/schemas/Error400' } } },
             },
-            401: {
-              description: 'Unauthorized',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            404: {
+              description: 'Réservation non trouvée',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error404' } } },
             },
             500: { description: 'Erreur serveur' },
           },
@@ -172,6 +148,10 @@ const options = {
             400: {
               description: 'Bad Request (champ obligatoire manquant / invalide)',
               content: { 'application/json': { schema: { $ref: '#/components/schemas/Error400' } } },
+            },
+            404: {
+              description: 'Salle non trouvée',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error404' } } },
             },
             401: {
               description: 'Unauthorized',
@@ -233,6 +213,10 @@ const options = {
             400: {
               description: 'Bad Request (champ obligatoire manquant / invalide)',
               content: { 'application/json': { schema: { $ref: '#/components/schemas/Error400' } } },
+            },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
             },
             401: {
               description: 'Unauthorized',
