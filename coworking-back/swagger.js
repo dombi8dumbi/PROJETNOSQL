@@ -21,7 +21,7 @@ const options = {
       schemas: {
         Reservation: {
           type: 'object',
-          required: ['nom'],
+          required: ['nom', 'date'],
           properties: {
             nom: { type: 'string', example: 'Reservation du 15 Juillet 2024' },
             description: { type: 'string', example: '' },
@@ -52,13 +52,35 @@ const options = {
             Mot_de_passe: { type: 'string', example: 'Abcd1234!' },
           },
         },
+
+        Error400: {
+          type: 'object',
+          properties: {
+            message: { type: 'string', example: 'Validation error' },
+            errors: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  field: { type: 'string', example: 'Email_user' },
+                  message: { type: 'string', example: 'Email_user est obligatoire' },
+                },
+              },
+            },
+          },
+        },
+
+        Error401: {
+          type: 'object',
+          properties: {
+            message: { type: 'string', example: 'Unauthorized: token missing or invalid' },
+          },
+        },
       },
     },
 
-    // Si tout est protégé par middleware auth, garde ça global
     security: [{ bearerAuth: [] }],
 
-    // ----------- Endpoints -----------
     paths: {
       '/api/reservations': {
         get: {
@@ -66,7 +88,10 @@ const options = {
           tags: ['Reservation'],
           responses: {
             200: { description: 'Liste des réservations' },
-            401: { description: 'Unauthorized' },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             500: { description: 'Erreur serveur' },
           },
         },
@@ -83,7 +108,14 @@ const options = {
           },
           responses: {
             201: { description: 'Réservation créée' },
-            401: { description: 'Unauthorized' },
+            400: {
+              description: 'Bad Request (champ obligatoire manquant / invalide)',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error400' } } },
+            },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             500: { description: 'Erreur serveur' },
           },
         },
@@ -101,7 +133,10 @@ const options = {
           ],
           responses: {
             200: { description: 'Réservation supprimée' },
-            401: { description: 'Unauthorized' },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             404: { description: 'Réservation non trouvée' },
             500: { description: 'Erreur serveur' },
           },
@@ -114,7 +149,10 @@ const options = {
           tags: ['Room'],
           responses: {
             200: { description: 'Liste des salles' },
-            401: { description: 'Unauthorized' },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             500: { description: 'Erreur serveur' },
           },
         },
@@ -131,7 +169,14 @@ const options = {
           },
           responses: {
             201: { description: 'Salle créée' },
-            401: { description: 'Unauthorized' },
+            400: {
+              description: 'Bad Request (champ obligatoire manquant / invalide)',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error400' } } },
+            },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             500: { description: 'Erreur serveur' },
           },
         },
@@ -149,7 +194,10 @@ const options = {
           ],
           responses: {
             200: { description: 'Salle supprimée' },
-            401: { description: 'Unauthorized' },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             404: { description: 'Salle non trouvée' },
             500: { description: 'Erreur serveur' },
           },
@@ -162,7 +210,10 @@ const options = {
           tags: ['User'],
           responses: {
             200: { description: 'Liste des utilisateurs' },
-            401: { description: 'Unauthorized' },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             500: { description: 'Erreur serveur' },
           },
         },
@@ -179,7 +230,14 @@ const options = {
           },
           responses: {
             201: { description: 'Utilisateur créé' },
-            401: { description: 'Unauthorized' },
+            400: {
+              description: 'Bad Request (champ obligatoire manquant / invalide)',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error400' } } },
+            },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             500: { description: 'Erreur serveur' },
           },
         },
@@ -197,7 +255,10 @@ const options = {
           ],
           responses: {
             200: { description: 'Utilisateur supprimé' },
-            401: { description: 'Unauthorized' },
+            401: {
+              description: 'Unauthorized',
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/Error401' } } },
+            },
             404: { description: 'Utilisateur non trouvé' },
             500: { description: 'Erreur serveur' },
           },
@@ -206,7 +267,6 @@ const options = {
     },
   },
 
-  // Important : on vide apis ici, sinon tu auras des doublons
   apis: [],
 };
 
