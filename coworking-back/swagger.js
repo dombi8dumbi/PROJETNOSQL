@@ -8,10 +8,8 @@ const options = {
       version: '1.0.0',
       description: 'Documentation interactive des modules',
     },
-    servers: [
-      // Mets le bon lien Render (chez toi c'est j1sp)
-      { url: 'https://projetnosql-j1sp.onrender.com/' },
-    ],
+    servers: [{ url: 'https://projetnosql-j1sp.onrender.com' }],
+
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -56,14 +54,160 @@ const options = {
         },
       },
     },
+
+    // Si tout est protégé par middleware auth, garde ça global
     security: [{ bearerAuth: [] }],
+
+    // ----------- Endpoints -----------
+    paths: {
+      '/api/reservations': {
+        get: {
+          summary: 'Récupérer toutes les réservations',
+          tags: ['Reservation'],
+          responses: {
+            200: { description: 'Liste des réservations' },
+            401: { description: 'Unauthorized' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+        post: {
+          summary: 'Créer une nouvelle réservation',
+          tags: ['Reservation'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Reservation' },
+              },
+            },
+          },
+          responses: {
+            201: { description: 'Réservation créée' },
+            401: { description: 'Unauthorized' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+        delete: {
+          summary: 'Supprimer une réservation',
+          tags: ['Reservation'],
+          parameters: [
+            {
+              name: 'id',
+              in: 'query',
+              required: true,
+              description: 'ID de la réservation à supprimer',
+              schema: { type: 'string', example: '65ffc3fad3412cc8380001a8' },
+            },
+          ],
+          responses: {
+            200: { description: 'Réservation supprimée' },
+            401: { description: 'Unauthorized' },
+            404: { description: 'Réservation non trouvée' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+      },
+
+      '/api/rooms': {
+        get: {
+          summary: 'Récupérer toutes les salles',
+          tags: ['Room'],
+          responses: {
+            200: { description: 'Liste des salles' },
+            401: { description: 'Unauthorized' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+        post: {
+          summary: 'Créer une nouvelle salle',
+          tags: ['Room'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Room' },
+              },
+            },
+          },
+          responses: {
+            201: { description: 'Salle créée' },
+            401: { description: 'Unauthorized' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+        delete: {
+          summary: 'Supprimer une salle',
+          tags: ['Room'],
+          parameters: [
+            {
+              name: 'id',
+              in: 'query',
+              required: true,
+              description: 'ID de la salle à supprimer',
+              schema: { type: 'string', example: '65ffc3fad3412cc8380001a8' },
+            },
+          ],
+          responses: {
+            200: { description: 'Salle supprimée' },
+            401: { description: 'Unauthorized' },
+            404: { description: 'Salle non trouvée' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+      },
+
+      '/api/users': {
+        get: {
+          summary: 'Récupérer tous les utilisateurs',
+          tags: ['User'],
+          responses: {
+            200: { description: 'Liste des utilisateurs' },
+            401: { description: 'Unauthorized' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+        post: {
+          summary: 'Créer un nouvel utilisateur',
+          tags: ['User'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/User' },
+              },
+            },
+          },
+          responses: {
+            201: { description: 'Utilisateur créé' },
+            401: { description: 'Unauthorized' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+        delete: {
+          summary: 'Supprimer un utilisateur',
+          tags: ['User'],
+          parameters: [
+            {
+              name: 'id',
+              in: 'query',
+              required: true,
+              description: "ID de l'utilisateur à supprimer",
+              schema: { type: 'string', example: '65ffc3fad3412cc8380001a8' },
+            },
+          ],
+          responses: {
+            200: { description: 'Utilisateur supprimé' },
+            401: { description: 'Unauthorized' },
+            404: { description: 'Utilisateur non trouvé' },
+            500: { description: 'Erreur serveur' },
+          },
+        },
+      },
+    },
   },
 
-  apis: [
-    './Routes/reservations.js',
-    './Routes/room.js',
-    './Routes/user.js',
-  ],
+  // Important : on vide apis ici, sinon tu auras des doublons
+  apis: [],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
